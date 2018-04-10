@@ -25,12 +25,14 @@ public class Main extends Application {
         stage.setScene(new Scene(createContent()));
         stage.getScene().setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.LEFT) {
-                player.moveX(-10);
+                player.moveX(-5);
             } else if (e.getCode() == KeyCode.RIGHT) {
-                player.moveX(10);
+                player.moveX(5);
             } else if (e.getCode() == KeyCode.SPACE) {
-
+            	if (!bullet.isAlive()) {
+            		bullet = new Bullet() ;
             		addGameObject(bullet, player.getView().getTranslateX()+10, 540);
+            	}
                
             }
         });
@@ -61,6 +63,9 @@ public class Main extends Application {
 	
 	private void onUpdate() {
 		bullet.move();
+		if (!bullet.isAlive()) {
+			root.getChildren().remove(bullet.getView());
+		}
     }
 	
 	public static void main(String[] args) {
