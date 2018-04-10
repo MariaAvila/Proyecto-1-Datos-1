@@ -10,7 +10,7 @@ public class GameObject {
     public GameObject(Node view) {
         this.view = view;
     }
-
+    
     public Node getView() {
         return view;
     }
