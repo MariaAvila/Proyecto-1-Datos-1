@@ -5,16 +5,6 @@ import javafx.scene.shape.Rectangle;
 
 public class Bullet extends GameObject {
 
-	private Bullet next = null;
-	
-	public Bullet getNext() {
-		return next;
-	}
-
-	public void setNext(Bullet next) {
-		this.next = next;
-	}
-
 	public Bullet() {
 		super(new Rectangle(1, 10, Color.BLUE));
 	}
@@ -22,9 +12,11 @@ public class Bullet extends GameObject {
 	public void move() {
 		if (isAlive()) {
 			if (getView().getTranslateY()> 0) {
-				getView().setTranslateY(getView().getTranslateY() - 5);}
+				getView().setTranslateY(getView().getTranslateY() - 10);}
 			else {
 				this.setAlive(false);
+				getView().setTranslateY(-1);
+				getView().setTranslateX(-1);
 				return;
 			}
 		}
