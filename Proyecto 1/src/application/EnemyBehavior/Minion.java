@@ -6,7 +6,7 @@ import javafx.scene.shape.Rectangle;
 public class Minion extends Enemy{
 
 	public Minion(int resistance) {
-		super(new Rectangle(20, 20, Color.GREEN));
+		super(new Rectangle(25, 25, Color.GREEN));
 		this.setResistance(resistance);
 	}
 

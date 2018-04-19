@@ -1,7 +1,10 @@
 package application;
 	
 
+import application.EnemyBehavior.AList;
+import application.EnemyBehavior.BList;
 import application.EnemyBehavior.BasicList;
+import application.EnemyBehavior.Boss;
 import application.EnemyBehavior.Enemy;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -23,6 +26,9 @@ public class Main extends Application {
 	private BasicList list = new BasicList();
 	private int EnemyTimer = 0;
 	private int displace = 1;
+	private int BposX = 100;
+	private int BposY = 20;
+	private String type = "Basic";
 
 	@Override
     public void start(Stage stage) throws Exception {
@@ -46,10 +52,8 @@ public class Main extends Application {
 	 private Parent createContent() {
 	        setRoot(new Pane());
 	        getRoot().setPrefSize(600, 600);
-
+	        list.setFirst(null);
 	        addGameObject(player, 300, 550);
-	        list = new BasicList();
-	        addEnemies(list);
 	        AnimationTimer timer = new AnimationTimer() {
 	            @Override
 	            public void handle(long now) {
@@ -67,12 +71,11 @@ public class Main extends Application {
         getRoot().getChildren().add(object.getView());
 	}
 	
-	public void addEnemies(BasicList list) {
+	public void addEnemies(BasicList list, int posX, int posY) {
 		Enemy helper = list.getFirst();
-		int pos = 100;
 		while (helper != null) {
-			addGameObject(helper, pos, 20);
-			pos += 40;
+			addGameObject(helper, posX, posY);
+			posX += 40;
 			helper = helper.getNext();
 			}
 		}
@@ -82,72 +85,103 @@ public class Main extends Application {
 		Enemy helper = list.getFirst();
 		while (helper != null) {
 			if (helper.isColliding(bullet)) {
-                bullet.setAlive(false);
-                Enemy toKill = helper;
-                while (toKill.getNext() != null) {
-                	toKill = toKill.getNext();
-                }
-                toKill.setAlive(false);
-                
+				
+				if (helper.getResistance()>1) {
+					helper.setResistance(helper.getResistance() -1);
+				}
+				else {
+					if (type.equals("A") || type.equals("B") ) {
+						if (helper instanceof Boss) {
+							Enemy killer = list.getFirst();
+							while (killer != null) {
+								killer.setAlive(false);
+								root.getChildren().remove(killer.getView());
+								killer = killer.getNext();
+							}
+						}
+					}
+                	helper.setAlive(false);
+				
+					list.setEnemyNumber(list.getEnemyNumber()-1);
+					list.CenterList(helper);
+                	root.getChildren().remove(helper.getView());
+				}
+				bullet.setAlive(false);
                 bullet.getView().setTranslateY(-1);
 				bullet.getView().setTranslateX(-1);
-
-                root.getChildren().removeAll (toKill.getView());
+				
             }
 			helper = helper.getNext();
 		}
-		list.DeleteLast();
+		list.DeleteEnemy();
 		bullet.move();
-		displace = list.Move(displace);
+		int newDisplace = list.Move(displace);
+		if (newDisplace != displace) {
+			BposY +=30;
+		}
+		displace = newDisplace;
+		BposX -= displace;
 		if (!bullet.isAlive()) {
 			getRoot().getChildren().remove(bullet.getView());
 		}
-		if (EnemyTimer%10 == 0) {
+		if (list.getFirst() == null) {
+			//Random rand = new Random(); 
+			//int select = rand.nextInt(7);
+			int select = 2 ;
+			switch (select) {
+			case 0:
+				type = "Basic";
+				list = new BasicList();
+				addEnemies(list,100,20);
+				break;
+			case 1:
+				type = "A";
+				list = new AList();
+				addEnemies(list,100,20);
+				break;
+			case 2:
+				type = "B";
+				list = new BList();
+				addEnemies(list,100,20);
+				BposX = 100;
+				BposY = 20;
+				break;
+			case 3:
+				System.out.println("3");
+				//list = new BasicList();
+				//addEnemies(list,100,20);
+				break;
+			case 4:
+				System.out.println("4");
+				//list = new BasicList();
+				//addEnemies(list,100,20);
+				break;
+			case 5:
+				System.out.println("5");
+				//list = new BasicList();
+				//addEnemies(list,100,20);
+				break;
+			case 6:
+				System.out.println("6");
+				//list = new BasicList();
+				//addEnemies(list,100,20);
+				break;
+			}
 			
-			if (list.getFirst() == null) {
-				Random rand = new Random(); 
-				int select = rand.nextInt(7);
-				switch (select) {
-				case 0:
-					System.out.println("0");
-					list = new BasicList();
-					addEnemies(list);
-					break;
-				case 1:
-					System.out.println("1");
-					list = new BasicList();
-					addEnemies(list);
-					break;
-				case 2:
-					System.out.println("2");
-					list = new BasicList();
-					addEnemies(list);
-					break;
-				case 3:
-					System.out.println("3");
-					list = new BasicList();
-					addEnemies(list);
-					break;
-				case 4:
-					System.out.println("4");
-					list = new BasicList();
-					addEnemies(list);
-					break;
-				case 5:
-					System.out.println("5");
-					list = new BasicList();
-					addEnemies(list);
-					break;
-				case 6:
-					System.out.println("6");
-					list = new BasicList();
-					addEnemies(list);
-					break;
+			
+		}
+		if (EnemyTimer%50 == 0) {
+			
+			if (type.equals("B")) {
+				Enemy remover = list.getFirst();
+				while (remover != null) {
+					root.getChildren().remove(remover.getView());
+					remover = remover.getNext();
 				}
-				
-				
+				list.MixList();
+				addEnemies(list,BposX,BposY);
 			}
-			}
+		}
     }
 	
 	public static void main(String[] args) {

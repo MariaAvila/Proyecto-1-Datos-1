@@ -1,9 +1,12 @@
 package application.EnemyBehavior;
 
+import java.util.Random;
+
 
 public class BasicList {
 	
-private Enemy first = null;
+	private Enemy first = null;
+	private int EnemyNumber = 7;
 	
 	public Enemy getFirst() {
 		return first;
@@ -11,7 +14,7 @@ private Enemy first = null;
 
 	public void AddEnemy(Enemy toAdd) {
 		Enemy helper = first;
-		if (helper==null) {
+		if (helper == null) {
 			this.first = toAdd;
 		}
 		else {
@@ -50,7 +53,7 @@ private Enemy first = null;
 	}
 	
 	public void DeleteEnemy() {
-		Enemy helper = first;
+		Enemy helper = this.first;
 		Enemy prev = null;
 		while (helper != null) {
 			if (!helper.isAlive()) {
@@ -98,9 +101,65 @@ private Enemy first = null;
 		return displace;
 	}
 	
-	public BasicList() {
-		for (int i = 0; i < 7 ;i++ ) {
+	public void CenterList(Enemy base) {
+		double location = base.getView().getTranslateX();
+		Enemy helper = this.first;
+		Enemy prev = null;
+		if (helper == base) {
+			return;
+		}
+		while (prev != base) {
+			prev = helper;
+			helper = helper.getNext();
+		}
+		while (helper != null) {
+			helper.getView().setTranslateX(location);
+			location += 40;
+			helper = helper.getNext();
+		}
+		
+	}
+	
+	public void MixList() {
+		BasicList result = new BasicList();
+		result.setFirst(null);
+		Random rand = new Random(); 
+		Enemy helper = this.first;
+		Enemy next = null;
+		int pos = rand.nextInt(EnemyNumber);
+		for (int i = 0; i< pos; i++) {
+			helper = helper.getNext();
+		}
+		while (helper != null) {
+			next = helper.getNext();
+			helper.setNext(null);
+			result.AddEnemy(helper);
+			helper.setNext(next);
+			helper = helper.getNext();
+		}
+		for (int i = 0; i< pos; i++) {
 			Enemy enemy = EnemyFactory.GetEnemy("Minion",1);
+			result.AddEnemy(enemy);
+		}
+		this.setFirst(result.getFirst());
+	}
+	
+	public void setFirst(Enemy first) {
+		this.first = first;
+	}
+
+	public int getEnemyNumber() {
+		return EnemyNumber;
+	}
+
+	public void setEnemyNumber(int enemyNumber) {
+		EnemyNumber = enemyNumber;
+	}
+
+	public BasicList() {
+		Enemy enemy;
+		for (int i = 0; i < 7 ;i++ ) {
+			enemy = EnemyFactory.GetEnemy("Minion",1);
 			this.AddEnemy(enemy);
 		}
 	}
