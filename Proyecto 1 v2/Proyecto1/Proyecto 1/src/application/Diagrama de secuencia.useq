@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.2.2" icons="true" generate-combined-fragments="true">  
+  <object id="1" language="java" name="application.Main" project="Proyecto 1" 
+    file="/Proyecto 1/src/application/Main.java" binary="false" label="main" type="class" autoSize="false">    
+    <position height="99" width="81" x="0" y="0"/>    
+    <execution id="2">      
+      <position height="105" width="77" x="5" y="99"/>    
+    </execution>    
+    <execution id="5">      
+      <position height="21" width="7" x="40" y="141"/>    
+    </execution>  
+  </object>  
+  <object id="6" language="java" name="application.EnemyBehavior.BasicList" project="Proyecto 1" 
+    file="/Proyecto 1/src/application/EnemyBehavior/BasicList.java" binary="false" label="basicList" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="159" y="0"/>    
+    <execution id="4">      
+      <position height="63" width="121" x="86" y="120"/>    
+    </execution>  
+  </object>  
+  <message id="3" asynchronous="false">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </message>  
+  <message id="7" asynchronous="false">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </message>
+</sequence-diagram>
